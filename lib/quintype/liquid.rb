@@ -1,6 +1,8 @@
 require "quintype/liquid/version"
 require "quintype/liquid/templates"
-require "quintype/liquid/railtie" if defined?(Rails)
+require "quintype/liquid/liquid_template_caching_module"
+require "quintype/liquid/file_system"
+require "quintype/liquid/railtie"
 
 module Quintype
   module Liquid
