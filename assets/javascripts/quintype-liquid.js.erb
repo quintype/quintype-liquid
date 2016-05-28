@@ -1,0 +1,34 @@
+//= require liquid
+
+(function() {
+
+<% loader = Quintype::Liquid::Templates.new %>
+<% loader.paths.each do |path| %>
+  <% depend_on path %>
+<% end %>
+var Templates = <%= loader.templates.to_json %>;
+
+Liquid.readTemplateFile = function(path) {
+  var partialPath, template;
+  partialPath = replaceLast(path, '/', '/_');
+  template = Templates[path] || Templates[partialPath];
+  if (template) {
+    return template;
+  } else {
+    throw "Cannot find template! " + path;
+  }
+
+  function replaceLast(string, from, to) {
+      var last, pieces;
+    pieces = string.split(from);
+    last = pieces.pop();
+    return pieces.join(from) + to + last;
+  }
+};
+
+window.quintypeLiquid = {
+  templates: Templates,
+  parse: function(s) { return Liquid.parse(s); }
+};
+
+})();
