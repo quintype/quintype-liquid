@@ -6,12 +6,12 @@ module Quintype::Liquid
     end
 
     initializer "quintype-liquid.liquid-file-system" do |app|
-      template_path = ::Rails.root.join('app/views')
+      template_path = Rails.root.join('app/views')
       ::Liquid::Template.file_system = Quintype::Liquid::FileSystem.new(template_path)
     end
 
     initializer "quintype-liquid.fix-caching" do |app|
-      ::Liquid::Rails::TemplateHandler.send(:prepend, Quintype::Liquid::LiquidTemplateCachingModule)
+      ::Liquid::Rails::TemplateHandler.send(:prepend, Quintype::Liquid::LiquidTemplateCachingModule) unless Rails.env.development?
     end
   end
 end

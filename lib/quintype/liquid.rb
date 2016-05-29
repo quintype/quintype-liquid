@@ -1,5 +1,7 @@
-require "liquid-rails"
 require "quintype/liquid/version"
+
+require "liquid-rails"
+require "concurrent"
 
 module Quintype
   module Liquid
