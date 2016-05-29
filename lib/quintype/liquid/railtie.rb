@@ -12,7 +12,7 @@ module Quintype
       end
 
       initializer "quintype-liquid.fix-caching" do |app|
-        ::Liquid::Rails::TemplateHandler.send(:prepend, Quintype::Liquid::LiquidTemplateCachingModule) if (::Rails.env.development? || ::Rails.env.test?)
+        ::Liquid::Rails::TemplateHandler.send(:prepend, Quintype::Liquid::LiquidTemplateCachingModule) unless Rails.env.development?
       end
     end
   end
