@@ -1,17 +1,20 @@
 module Quintype::Liquid
+  module FileSystemCacheReadFile
+    def read_file(path)
+      @cached_templates ||= Concurrent::Map.new do |m, path|
+        m[path] = super(path)
+      end
+      @cached_templates[path]
+    end
+  end
+
   class FileSystem < ::Liquid::LocalFileSystem
     def read_file(path)
       full_path = full_path(path)
       File.read(full_path) if File.exists?(full_path)
     end
 
-    def read_file_with_caching(path)
-      @cached_templates ||= Concurrent::Map.new do |m, path|
-        m[path] = read_file_without_caching(path)
-      end
-      @cached_templates[path]
-    end
-    alias_method_chain :read_file, :caching if defined?(Rails) && Rails.env.production?
+    prepend FileSystemCacheReadFile if defined?(Rails) && Rails.env.production?
 
     def read_template_file(template_path, context)
       controller = context.registers[:controller]
