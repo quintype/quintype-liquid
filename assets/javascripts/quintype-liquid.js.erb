@@ -26,6 +26,17 @@ Liquid.readTemplateFile = function(path) {
   }
 };
 
+Liquid.Template.registerTag('content_for', Liquid.Block.extend({
+  tagSyntax: /(\w+)/,
+
+  init: function(tagName, markup, tokens) {
+    this._super(tagName, markup, tokens);
+  },
+  render: function(context) {
+    return '';
+  }
+}));
+
 window.quintypeLiquid = {
   templates: Templates,
   parse: function(s) { return Liquid.parse(s); }
